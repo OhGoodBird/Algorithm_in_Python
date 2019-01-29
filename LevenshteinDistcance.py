@@ -1,11 +1,8 @@
 def LevenshteinDistcance(s1, s2):
-    import numpy as np
     '''
     Levenshtein Distcance
     reference: https://en.wikipedia.org/wiki/Levenshtein_distance
-    
-    TO-DO: write remove numpy module version
-    
+        
     Args:
         s1: string, first string
         s2: string, second string
@@ -13,12 +10,12 @@ def LevenshteinDistcance(s1, s2):
     Returns:
         distance: int, Levenshtein Distcance of two string
     '''
-    d = np.zeros((len(s1)+1, len(s2)+1), dtype=np.int32)
+    d = [[0 for x in range(len(s2)+1)] for y in range(len(s1)+1)]
     
     for x in range(len(s1)+1):
-        d[x, 0] = x
+        d[x][0] = x
     for y in range(len(s2)+1):
-        d[0, y] = y
+        d[0][y] = y
     
     for x in range(1, len(s1)+1):
         for y in range(1, len(s2)+1):
@@ -26,9 +23,9 @@ def LevenshteinDistcance(s1, s2):
                 cost = 0
             else:
                 cost = 1
-            d[x, y] = min(d[x-1, y] + 1, d[x, y-1] + 1, d[x-1, y-1] + cost)
+            d[x][y] = min(d[x-1][y] + 1, d[x][y-1] + 1, d[x-1][y-1] + cost)
     
-    return d[len(s1), len(s2)]
+    return d[len(s1)][len(s2)]
     
 def main():
     import argparse
