@@ -55,7 +55,7 @@ def compute_ids(ref, hyp):
     # backtrace
     x = len(hyp)
     y = len(ref)
-    while(x > 0 and y > 0):
+    while(x > 0 or y > 0):
         if(backtrace[x][y] == 'O'):
             x -= 1
             y -= 1
