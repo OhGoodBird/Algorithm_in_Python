@@ -12,7 +12,20 @@ def compute_ids(ref, hyp):
         insersion: int
         deletion: int
         substitution: int
+        
+    Raises:
+        ValueError: If ref is empty
     '''
+    
+    if(len(ref) == 0):
+        raise ValueError('reference can\'t be empty string')
+        
+    num_ins, num_del, num_sub = 0, 0, 0
+    
+    if(len(hyp) == 0):
+        num_del = len(ref)
+        return num_ins, num_del, num_sub
+    
     d = [[0 for x in range(len(ref)+1)] for y in range(len(hyp)+1)]
     backtrace = [['O' for x in range(len(ref)+1)] for y in range(len(hyp)+1)]
         
@@ -42,7 +55,6 @@ def compute_ids(ref, hyp):
     # backtrace
     x = len(hyp)
     y = len(ref)
-    num_ins, num_del, num_sub = 0, 0, 0
     while(x > 0 and y > 0):
         if(backtrace[x][y] == 'O'):
             x -= 1
@@ -81,9 +93,15 @@ def main():
     parser.add_argument('hypothesis', type=str)
     args = parser.parse_args()
         
-    num_ins, num_del, num_sub = compute_ids(args.reference, args.hypothesis)
-    wer = (num_ins + num_del + num_sub)*100 / len(args.reference)
-    print('WER = {:.2f} %'.format(wer))
+    try:
+        num_ins, num_del, num_sub = compute_ids(args.reference, args.hypothesis)
+        print('ins = {}'.format(num_ins))
+        print('del = {}'.format(num_del))
+        print('sub = {}'.format(num_sub))
+        wer = (num_ins + num_del + num_sub)*100 / len(args.reference)
+        print('WER = {:.2f} %'.format(wer))
+    except ValueError:
+        print('reference can\'t be empty string')
     
 if __name__ == '__main__':
     main()
